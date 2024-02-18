@@ -3,7 +3,6 @@ ritchie is a simple rich text application
 
 ## To-do
 - Remove '/' after use it
-- Add underline support
 - Add code support
 - Add quote support
 - Add bullet list support
