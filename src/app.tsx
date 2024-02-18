@@ -1,4 +1,5 @@
 import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react'
+import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder';
 import StarterKit from '@tiptap/starter-kit'
@@ -10,7 +11,8 @@ import {
   TextAlignCenterIcon,
   TextAlignRightIcon,
   FontBoldIcon,
-  FontItalicIcon
+  FontItalicIcon,
+  UnderlineIcon
 } from '@radix-ui/react-icons';
 // import heading1 from './assets/heading1.png'
 // import heading2 from './assets/heading2.png'
@@ -22,6 +24,7 @@ export function App() {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Underline,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -71,6 +74,16 @@ export function App() {
                 aria-label="Italic"
               >
                 <FontItalicIcon />
+              </Toolbar.ToggleItem>
+
+              <Toolbar.ToggleItem
+                onClick={() => editor.chain().focus().toggleUnderline().run()}
+                data-state={editor.isActive('underline') && 'on'}
+                className="flex-shrink-0 flex-grow-0 basis-auto text-mauve11 h-[25px] px-[5px] rounded inline-flex text-[13px] leading-none items-center justify-center bg-white ml-0.5 outline-none hover:bg-violet3 hover:text-violet11 focus:relative focus:shadow-[0_0_0_2px] focus:shadow-violet7 first:ml-0 data-[state=on]:bg-violet5 data-[state=on]:text-violet11"
+                value="underline"
+                aria-label="Underline"
+              >
+                <UnderlineIcon />
               </Toolbar.ToggleItem>
 
               <Toolbar.ToggleItem
