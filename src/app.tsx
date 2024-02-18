@@ -1,9 +1,9 @@
-import { EditorContent, useEditor, BubbleMenu, FloatingMenu } from '@tiptap/react'
+import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react'
 import TextAlign from '@tiptap/extension-text-align'
 import Placeholder from '@tiptap/extension-placeholder';
 import StarterKit from '@tiptap/starter-kit'
 import * as Toolbar from '@radix-ui/react-toolbar';
-import * as ToggleGroup from '@radix-ui/react-toggle-group';
+// import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import {
   StrikethroughIcon,
   TextAlignLeftIcon,
@@ -12,10 +12,10 @@ import {
   FontBoldIcon,
   FontItalicIcon
 } from '@radix-ui/react-icons';
-import heading1 from './assets/heading1.png'
-import heading2 from './assets/heading2.png'
-import heading3 from './assets/heading3.png'
-import plaintext from './assets/plaintext.png'
+// import heading1 from './assets/heading1.png'
+// import heading2 from './assets/heading2.png'
+// import heading3 from './assets/heading3.png'
+// import plaintext from './assets/plaintext.png'
 
 
 export function App() {
@@ -26,7 +26,7 @@ export function App() {
         types: ['heading', 'paragraph'],
       }),
       Placeholder.configure({
-        placeholder: `Type something or press '/' for commands`,
+        placeholder: `Start writing something here...`,
         emptyNodeClass: 'before:text-mauve9 before:content-[attr(data-placeholder)] before:float-left before:h-0 before:pointer-events-none'
       })
     ],
@@ -121,7 +121,7 @@ export function App() {
         </BubbleMenu >
       )}
 
-      {editor && (
+      {/* {editor && (
         <FloatingMenu
           editor={editor}
           shouldShow={({ state }) => {
@@ -177,7 +177,7 @@ export function App() {
             </ToggleGroup.Item>
           </ToggleGroup.Root>
         </FloatingMenu >
-      )}
+      )} */}
 
       <EditorContent editor={editor} />
     </>
