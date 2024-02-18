@@ -65,6 +65,8 @@ export function App() {
     }
 
     editor?.chain().focus().extendMarkRange('link').setLink({ href: link }).run()
+
+    setLink('')
   }
 
   return (
