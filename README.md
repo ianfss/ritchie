@@ -2,13 +2,12 @@
 ritchie is a simple rich text application
 
 ## To-do
-- Remove '/' after use it
 - Add code support
-- Add quote support
 - Add bullet list support
-- Add link support
 - Add image support
 - Add divider support
+- Add voice to text support
+- Use local storage to keep text
 
 ## What did I use so far
 - [Vite](https://vitejs.dev/)

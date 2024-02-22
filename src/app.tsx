@@ -1,11 +1,12 @@
 import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
-import Placeholder from '@tiptap/extension-placeholder';
+import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import StarterKit from '@tiptap/starter-kit'
-import * as Toolbar from '@radix-ui/react-toolbar';
-import * as Dialog from '@radix-ui/react-dialog';
+import * as Toolbar from '@radix-ui/react-toolbar'
+import * as Dialog from '@radix-ui/react-dialog'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
   StrikethroughIcon,
   TextAlignLeftIcon,
@@ -15,7 +16,10 @@ import {
   FontItalicIcon,
   UnderlineIcon,
   ChevronDownIcon,
-  ExternalLinkIcon
+  ExternalLinkIcon,
+  LetterCaseCapitalizeIcon,
+  HeadingIcon,
+  QuoteIcon
 } from '@radix-ui/react-icons';
 import { useState } from 'react';
 
@@ -80,13 +84,61 @@ export function App() {
             aria-label="Formatting options"
           >
             <Toolbar.ToggleGroup type="single" aria-label="Turn into">
-              <Toolbar.ToggleItem
-                className={toggleItemClasses}
-                value="turninto"
-              >
-                Text
-                <ChevronDownIcon />
-              </Toolbar.ToggleItem>
+              <DropdownMenu.Root>
+                <Toolbar.Button
+                  asChild
+                  className={toggleItemClasses}
+                  value="turninto"
+                >
+                  <DropdownMenu.Trigger>
+                    {
+                      editor.isActive('heading', { level: 1 }) ? 'Heading 1' :
+                      editor.isActive('heading', { level: 2 }) ? 'Heading 2' :
+                      editor.isActive('heading', { level: 3 }) ? 'Heading 3' :
+                      editor.isActive('blockquote') ? 'Quote' :
+                      'Text'
+                    }
+                    <ChevronDownIcon />
+                  </DropdownMenu.Trigger>
+                </Toolbar.Button>
+
+                <DropdownMenu.Content
+                  className="min-w-[220px] bg-white rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade"
+                  sideOffset={5}
+                >
+                  <DropdownMenu.Item
+                    onClick={() => editor.chain().focus().setParagraph().run()}
+                    className="group text-sm leading-none pl-4 text-violet11 rounded-md flex gap-2 items-center px-1 py-4 relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  >
+                    <LetterCaseCapitalizeIcon className='size-6' />Text
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    className="group text-sm leading-none pl-4 text-violet11 rounded-md flex gap-2 items-center px-1 py-4 relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  >
+                    <HeadingIcon className='size-6' /> Heading 1
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    className="group text-sm leading-none pl-4 text-violet11 rounded-md flex gap-2 items-center px-1 py-4 relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  >
+                    <HeadingIcon className='size-6' /> Heading 2
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    className="group text-sm leading-none pl-4 text-violet11 rounded-md flex gap-2 items-center px-1 py-4 relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  >
+                    <HeadingIcon className='size-6' /> Heading 3
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                    className="group text-sm leading-none pl-4 text-violet11 rounded-md flex gap-2 items-center px-1 py-4 relative select-none outline-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1"
+                  >
+                    <QuoteIcon className='size-6' /> Quote
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Arrow className="fill-white" />
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             </Toolbar.ToggleGroup>
 
             <Toolbar.Separator className="w-[1px] bg-mauve6 mx-[10px]" />
@@ -211,65 +263,7 @@ export function App() {
         </BubbleMenu >
       )
       }
-
-      {/* {editor && (
-        <FloatingMenu
-          editor={editor}
-          shouldShow={({ state }) => {
-            return state.selection.$from.nodeBefore?.textContent === '/'
-          }}
-        >
-          <ToggleGroup.Root
-            orientation="vertical"
-            className="inline-flex flex-col bg-mauve6 rounded shadow-[0_2px_10px] shadow-blackA4 space-x-px"
-            type="single"
-            defaultValue="plaintext"
-            aria-label="Commands"
-          >
-            <ToggleGroup.Item
-              onClick={() => editor.chain().focus().clearContent().run()}
-              className="text-left items-center gap-4 hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex p-4 bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none" value="plaintext" aria-label="Plain Text"
-            >
-              <img src={plaintext} alt="" className='size-12 rounded-md' />
-              <div className='flex flex-col'>
-                <span className='text-sm font-medium text-mauve11'>Text</span>
-                <span className='text-xs text-mauve10'>Just start writing with plain text</span>
-              </div>
-            </ToggleGroup.Item>
-            <ToggleGroup.Item
-              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-              className="text-left items-center gap-4 hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex p-4 bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none" value="heading1" aria-label="Heading 1"
-            >
-              <img src={heading1} alt="" className='size-12 rounded-md' />
-              <div className='flex flex-col'>
-                <span className='text-sm font-medium text-mauve11'>Heading 1</span>
-                <span className='text-xs text-mauve10'>Create a big heading section</span>
-              </div>
-            </ToggleGroup.Item>
-            <ToggleGroup.Item
-              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-              className="text-left items-center gap-4 hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex p-4 bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none" value="heading2" aria-label="Heading 1"
-            >
-              <img src={heading2} alt="" className='size-12 rounded-md' />
-              <div className='flex flex-col'>
-                <span className='text-sm font-medium text-mauve11'>Heading 2</span>
-                <span className='text-xs text-mauve10'>Create a medium heading section</span>
-              </div>
-            </ToggleGroup.Item>
-            <ToggleGroup.Item
-              onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-              className="text-left items-center gap-4 hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex p-4 bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none" value="heading3" aria-label="Heading 1"
-            >
-              <img src={heading3} alt="" className='size-12 rounded-md' />
-              <div className='flex flex-col'>
-                <span className='text-sm font-medium text-mauve11'>Heading 3</span>
-                <span className='text-xs text-mauve10'>Create a small heading section</span>
-              </div>
-            </ToggleGroup.Item>
-          </ToggleGroup.Root>
-        </FloatingMenu >
-      )} */}
-
+      
       <EditorContent editor={editor} />
     </>
   )
